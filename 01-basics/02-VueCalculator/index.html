@@ -35,18 +35,18 @@
     <div id="app" class="container" v-cloak>
       <div class="row">
         <div class="col">
-          <input type="number" v-model="num1" @change="handlerCalculate" />
+          <input type="number" v-model="num1" />
         </div>
 
         <div class="col" style="display: flex; flex-direction: column; font-family: emoji;">
-          <label><input type="radio" name="operator" v-model="operator" @change="handlerCalculate" value="+" /> ➕</label>
-          <label><input type="radio" name="operator" v-model="operator" @change="handlerCalculate" value="-" /> ➖</label>
-          <label><input type="radio" name="operator" v-model="operator" @change="handlerCalculate" value="*" /> ✖</label>
-          <label><input type="radio" name="operator" v-model="operator" @change="handlerCalculate" value="/" /> ➗</label>
+          <label><input type="radio" name="operator" v-model="operator" value="+" /> ➕</label>
+          <label><input type="radio" name="operator" v-model="operator" value="-" /> ➖</label>
+          <label><input type="radio" name="operator" v-model="operator" value="*" /> ✖</label>
+          <label><input type="radio" name="operator" v-model="operator" value="/" /> ➗</label>
         </div>
 
         <div class="col">
-          <input type="number" v-model="num2" @change="handlerCalculate" />
+          <input type="number" v-model="num2" />
         </div>
 
         <div class="col">=</div>

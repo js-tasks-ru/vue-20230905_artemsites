@@ -6,15 +6,9 @@ createApp({
       num1: 0,
       num2: 0,
       operator: null,
-      result: 0,
     };
   },
   methods: {
-    handlerCalculate() {
-      if (this.operator !== null) {
-        this.result = this.mathIt(this.num1, this.operator, this.num2);
-      }
-    },
     mathIt(a, operator, b) {
       let calcFunctions = {
         '+': () => a + b,
@@ -25,4 +19,11 @@ createApp({
       return calcFunctions[operator]();
     },
   },
+  computed: {
+    result() {
+      if (this.operator !== null) {
+        return this.mathIt(this.num1, this.operator, this.num2);
+      }
+    },
+  }
 }).mount('#app');

@@ -8,19 +8,19 @@
       .marked {
         color: #efc14e;
       }
+      .email {
+        transition: 300ms;
+      }
     </style>
   </head>
   <body>
     <div id="app" style="margin-top: 2rem">
       <div class="container">
         <div class="form-group">
-          <input type="search" />
+          <input type="search" v-model="searchEmail" />
         </div>
         <ul>
-          <li>Email</li>
-          <li class="marked">Email</li>
-          <li>...</li>
-          <li>Email</li>
+          <li class="email" :class="{'marked': email.marked}" v-for="email in filteredEmails">{{email.value}}</li>
         </ul>
       </div>
     </div>

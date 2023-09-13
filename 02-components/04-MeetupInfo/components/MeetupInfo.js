@@ -21,6 +21,9 @@ export default defineComponent({
   computed: {
     dateLocal() {
       return new Date(this.date).toLocaleDateString(navigator.language, { year: 'numeric', month: 'short', day: 'numeric' })
+    },
+    dateForDatetimeTag() {
+      return new Date(this.date).toISOString().slice(0, 10);
     }
   },
 
@@ -36,7 +39,7 @@ export default defineComponent({
       </li>
       <li>
         <img class="icon meetup-info__icon" alt="icon" src="/assets/icons/icon-cal-lg.svg" />
-        <time datetime="2020-01-01">{{ dateLocal }}</time>
+        <time :datetime="dateForDatetimeTag">{{ dateLocal }}</time>
       </li>
     </ul>`,
 });

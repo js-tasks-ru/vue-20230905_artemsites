@@ -1,31 +1,122 @@
 <template>
-  <div class="dropdown dropdown_opened">
-    <button type="button" class="dropdown__toggle dropdown__toggle_icon">
-      <UiIcon icon="tv" class="dropdown__icon" />
-      <span>Title</span>
+  <div class="dropdown" :class="{'dropdown_opened': isDropdownOpened}">
+    <button type="button" class="dropdown__toggle" :class="{dropdown__toggle_icon: isBtnWithIcon}" @click="toggleDropdown">
+      <UiIcon :icon="selected.icon" class="dropdown__icon" />
+      {{ selected.text }}
     </button>
 
+    <!-- v-show="false" -->
     <div class="dropdown__menu" role="listbox">
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <UiIcon icon="tv" class="dropdown__icon" />
-        Option 1
+      <button
+        class="dropdown__item"
+        :class="{
+          dropdown__item_icon: opt.icon
+        }"
+        role="option"
+        type="button"
+        v-for="opt in options"
+        :key="opt.value"
+        @click="selectHandler(opt)"
+      >
+
+        <UiIcon v-if="opt.icon" :icon="opt.icon" class="dropdown__icon" />
+        {{ opt.text }}
+
       </button>
-      <button class="dropdown__item dropdown__item_icon" role="option" type="button">
+      <!-- <button class="dropdown__item dropdown__item_icon" role="option" type="button">
         <UiIcon icon="tv" class="dropdown__icon" />
         Option 2
-      </button>
+      </button> -->
     </div>
+
+    <select hidden>
+      <option selected></option>
+      <option
+        v-for="opt in options"
+        :value="opt.value"
+        :key="opt.value"
+        :selected="(selected.value===opt.value)?true:false"
+      >
+        {{ opt.text }}
+      </option>
+    </select>
+
   </div>
 </template>
 
 <script>
 import UiIcon from './UiIcon.vue';
+import { ref, watch, defineComponent, computed } from 'vue';
 
-export default {
+
+
+export default defineComponent({
   name: 'UiDropdown',
 
   components: { UiIcon },
-};
+
+  props: {
+    modelValue: {
+      type: String,
+    },
+    // { value, text, icon? }
+    options: {
+      type: Object
+    },
+    title: {
+      type: String
+    },
+  },
+
+  emits: ['update:modelValue'],
+
+
+
+  setup(props, { emit }) {
+
+    let isDropdownOpened = ref(false);
+    let selected = ref({ value: props.modelValue, text: props.title, icon: '' });
+
+
+
+    watch(() => props.modelValue, (newVal) => {
+      if (newVal) selected.value = props.options.find(opt => opt.value === newVal)
+      // console.log('selected.value')
+      // console.log(selected.value)
+    }, { immediate: true })
+
+
+
+    let isBtnWithIcon = computed(() => {
+      return props.options.find(opt=>opt.icon)
+    })
+
+
+
+    function toggleDropdown() {
+      isDropdownOpened.value = !isDropdownOpened.value
+    }
+
+    function selectHandler(opt) {
+      selected.value = opt
+      emit('update:modelValue', opt.value)
+      closeDropdown()
+    }
+
+    function closeDropdown() {
+      isDropdownOpened.value = false
+    }
+
+    return {
+      isBtnWithIcon,
+      selected,
+      isDropdownOpened,
+      toggleDropdown,
+      closeDropdown,
+      selectHandler,
+    }
+  }
+});
 </script>
 
 <style scoped>
@@ -87,7 +178,6 @@ export default {
 .dropdown__menu {
   background-clip: padding-box;
   border-radius: 0 0 8px 8px;
-  border: 2px solid var(--blue);
   border-top: none;
   bottom: auto;
   display: flex;
@@ -98,11 +188,20 @@ export default {
   padding: 0;
   position: absolute;
   right: auto;
-  top: -1px;
+  top: -2px;
   transform: translate3d(0px, 52px, 0px);
   width: 100%;
   will-change: transform;
   z-index: 95;
+
+  height: 0;
+  border: none;
+}
+
+.dropdown_opened .dropdown__menu {
+  height: auto;
+  border: 0 solid var(--blue);
+  border-width: 0 2px 2px 2px;
 }
 
 .dropdown__item {

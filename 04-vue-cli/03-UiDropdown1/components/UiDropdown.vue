@@ -1,16 +1,16 @@
 <template>
   <div class="dropdown" :class="{'dropdown_opened': isDropdownOpened}">
     <button type="button" class="dropdown__toggle" :class="{dropdown__toggle_icon: isBtnWithIcon}" @click="toggleDropdown">
-      <UiIcon :icon="selected.icon" class="dropdown__icon" />
+      <UiIcon v-if="selected.icon" :icon="selected.icon" class="dropdown__icon" />
       {{ selected.text }}
     </button>
 
     <!-- v-show="false" -->
-    <div class="dropdown__menu" role="listbox">
+    <div class="dropdown__menu" role="listbox" v-show="isDropdownOpened">
       <button
         class="dropdown__item"
         :class="{
-          dropdown__item_icon: opt.icon
+          'dropdown__item_icon': options.find(opt=>opt.icon),
         }"
         role="option"
         type="button"
@@ -59,7 +59,6 @@ export default defineComponent({
     modelValue: {
       type: String,
     },
-    // { value, text, icon? }
     options: {
       type: Object
     },

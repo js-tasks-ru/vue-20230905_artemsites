@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown" :class="{'dropdown_opened': isDropdownOpened}">
+  <div class="dropdown" :class="{ 'dropdown_opened': isDropdownOpened }">
     <button type="button" class="dropdown__toggle" :class="{dropdown__toggle_icon: isBtnWithIcon}" @click="toggleDropdown">
       <UiIcon v-if="selected.icon" :icon="selected.icon" class="dropdown__icon" />
       {{ selected.text }}
@@ -10,32 +10,31 @@
       <button
         class="dropdown__item"
         :class="{
-          'dropdown__item_icon': options.find(opt=>opt.icon),
+          'dropdown__item_icon': options.find(opt => opt.icon),
         }"
         role="option"
         type="button"
         v-for="opt in options"
         :key="opt.value"
-        @click="selectHandler(opt)"
+        @click="handlerDropdownSelect(opt)"
       >
 
         <UiIcon v-if="opt.icon" :icon="opt.icon" class="dropdown__icon" />
         {{ opt.text }}
 
       </button>
-      <!-- <button class="dropdown__item dropdown__item_icon" role="option" type="button">
-        <UiIcon icon="tv" class="dropdown__icon" />
-        Option 2
-      </button> -->
     </div>
 
-    <select hidden>
-      <option selected></option>
+
+
+    <select
+      @change="handlerSelect($event)"
+    >
       <option
         v-for="opt in options"
         :value="opt.value"
         :key="opt.value"
-        :selected="(selected.value===opt.value)?true:false"
+        :selected="(selected.value === opt.value) ? true : false"
       >
         {{ opt.text }}
       </option>
@@ -72,7 +71,6 @@ export default defineComponent({
 
 
   setup(props, { emit }) {
-
     let isDropdownOpened = ref(false);
     let selected = ref({ value: props.modelValue, text: props.title, icon: '' });
 
@@ -87,7 +85,7 @@ export default defineComponent({
 
 
     let isBtnWithIcon = computed(() => {
-      return props.options.find(opt=>opt.icon)
+      return props.options.find(opt => opt.icon)
     })
 
 
@@ -96,15 +94,27 @@ export default defineComponent({
       isDropdownOpened.value = !isDropdownOpened.value
     }
 
-    function selectHandler(opt) {
+
+
+    function handlerDropdownSelect(opt) {
       selected.value = opt
       emit('update:modelValue', opt.value)
       closeDropdown()
     }
 
+
+
+    function handlerSelect(e) {
+      emit('update:modelValue', e.target.value)
+    }
+
+
+
     function closeDropdown() {
       isDropdownOpened.value = false
     }
+
+
 
     return {
       isBtnWithIcon,
@@ -112,7 +122,8 @@ export default defineComponent({
       isDropdownOpened,
       toggleDropdown,
       closeDropdown,
-      selectHandler,
+      handlerDropdownSelect,
+      handlerSelect,
     }
   }
 });

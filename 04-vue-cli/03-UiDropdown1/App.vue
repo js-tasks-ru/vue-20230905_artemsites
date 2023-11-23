@@ -1,21 +1,25 @@
 <template>
   <div class="sample container">
     <h2>With icons</h2>
+
     <p>selectedType = {{ selectedType }}</p>
+    <p>selectedLang = {{ selectedLang }}</p>
+    <p>selectedMixed = {{ selectedMixed }}</p>
+
     <p><button @click="selectedType = 'registration'">Set registration</button></p>
     <p><button @click="updateOptions">Remove last option</button></p>
     <p>
-      <UiDropdown v-model="selectedType" :options="agendaItemTypes" title="Событие" />
+      <UiDropdown v-model="selectedType" :options="agendaItemTypes" title="Событие"  />
     </p>
 
     <h2>Without icons</h2>
     <p>selectedLang = {{ selectedLang }}</p>
     <p>
-      <UiDropdown v-model="selectedLang" :options="langOptions" title="Язык" />
+      <UiDropdown v-model="selectedLang" :options="langOptions" title="Язык"  />
     </p>
 
     <h2>Mixed icons</h2>
-    <UiDropdown v-model="selectedMixed" :options="mixedIconsOptions" title="Mixed icons" />
+    <UiDropdown v-model="selectedMixed" :options="mixedIconsOptions" title="Mixed icons"  />
     <p></p>
   </div>
 </template>
@@ -75,6 +79,7 @@ const agendaItemTypes = [
 export default {
   name: 'App',
   components: { UiDropdown },
+
   data() {
     return {
       agendaItemTypes,
@@ -90,9 +95,16 @@ export default {
       ],
 
       selectedLang: 'EN',
-      selectedType: undefined,
-      selectedMixed: undefined,
+      selectedType: null,
+      selectedMixed: null,
     };
+  },
+
+  watch: {
+    // selectedType(newVal) {
+    //   console.log('newVal')
+    //   console.log(newVal)
+    // }
   },
 
   methods: {

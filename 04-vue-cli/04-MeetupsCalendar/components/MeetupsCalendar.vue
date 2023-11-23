@@ -9,6 +9,15 @@
     </div>
 
     <div class="calendar-view__grid">
+      <div v-for="day in calendar[curMonth]" :key="day" class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
+        <div class="calendar-view__cell-day">{{ day.date }}</div>
+        <div class="calendar-view__cell-content"></div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="calendar-view__grid">
       <div class="calendar-view__cell calendar-view__cell_inactive" tabindex="0">
         <div class="calendar-view__cell-day">28</div>
         <div class="calendar-view__cell-content"></div>
@@ -161,16 +170,70 @@
 </template>
 
 <script>
-export default {
+import { defineComponent, ref } from 'vue';
+
+import { getCalendar } from '../utils/getCalendar.js';
+
+export default defineComponent({
   name: 'MeetupsCalendar',
 
   props: {
+    // @note Дата митапа хранится в свойстве date в формате UNIX Timestamp;
     meetups: {
       type: Array,
       required: true,
     },
   },
-};
+
+  setup(props) {
+
+    // let prevMonthDays = ref([]);
+    // let curMonthDays = ref([]);
+    // let nextMonthDays = ref([]);
+
+    let curMonth = new Date().getMonth();
+    let calendar = getCalendar();
+
+    let curCalendarTable = createCurCalendarTable(calendar, curMonth);
+
+    // console.log(curMonthName);
+    // console.log(props.meetups);
+
+    // console.log('calendar')
+    // console.log(calendar)
+
+    function createCurCalendarTable(calendar, month) {
+      let curMonth = calendar[month];
+      console.log('curMonth')
+      console.log(curMonth)
+
+      let countDaysFromPrevMonth = 0;
+      if (curMonth[0].day > 1) {
+        countDaysFromPrevMonth = (1 - curMonth[0].day) * -1;
+      }
+      console.log('countDaysFromPrevMonth')
+      console.log(countDaysFromPrevMonth)
+
+      let countDaysFromNextMonth = 0;
+      if (curMonth[0].day < 7) {
+        countDaysFromNextMonth = 7 - curMonth[curMonth.length-1].day;
+      }
+      console.log('countDaysFromNextMonth')
+      console.log(countDaysFromNextMonth)
+
+      for (let i=1; i<=35; i++) {
+        // console.log('i')
+        // console.log(i)
+      }
+    }
+
+    return {
+      curMonth,
+      calendar,
+    }
+
+  }
+})
 </script>
 
 <style scoped>
